@@ -1,0 +1,45 @@
+INSTALAR SSL CERTIFICADO SEGURO
+PASO 1: Generar un CSR o petición de firma.
+openssl req -nodes -newkey rsa:2048 -keyout myserver.key -out server.csr
+Esta orden crea dos archivos:
+	 "myserver.key" contiene la llave privada
+"server.csr", es el CSR, para el cual tendras que introducir los datos que quieras que aparezcan en el certificado,
+
+después te pedirá los siguientes datos extras que se enviarán con la petición del certificado
+
+A challenge password [ ]:(Contraseña)
+
+An optional company name [ ]:(Nombre opcional de la organización)
+
+--
+
+* Common Name (CN). Nombre de dominio para el que se va a solicitar el certificado. Asegúrate de que todo es correcto y que contiene un dominio principal o subdominio (ejemplo: www.midominio.com, seguridad.midominio.com, ...).
+Copia y guarde todo el contenido comprendido desde:
+
+--BEGIN CERTIFICATE REQUEST--
+
+... .hasta
+
+--END CERTIFICATE REQUEST--
+
+PASO 2: Instalación SSL
+
+1) Instalación del certificado intermedio
+	Este certificado lo recibirás por e-mail junto con el certificado propio como gs_intermediate_ca.crt
+	Deberás realizar los siguientes pasos:
+	1- Guarda el archivo en apache/conf/ssl/
+	2- PARA el servidor apache.
+	3- Localiza el archivo prueba.conf y ábrelo con un editor de texto.
+	4- Localiza la directiva "SSLCaCertificateFile" en tu httpd.conf y elimina el simbolo # de la línea.
+	5- Modifica el directorio del final de la línea haciendo referencia al certificadogs_intermediate_ca.crt recién guardado. Por ejemplo: SSLCaCertificateFile /usr/local/apache/conf/ssl/gs_intermediate_ca.crt
+	6- Finalmente reinicia Apache.
+2) Instalación del certificado propio
+Copia el certificado en un directorio seguro que utilices exclusivamente para este fin.
+Por defecto: /usr/local/apache/conf/ssl.crt/ o /etc/httpd/conf/ssl.crt/.
+
+Abre el archivo prueba.conf file en una shell con edición de texto.
+Localiza el SSL HostVirtualasociado a tu certificado. Verifica que tienes las dos siguientes directivas en tu host virtual, en caso contrario deberás añadirlas manualmente:
+SSLCertificateFile /usr/local/apache/conf/ssl.crt/nombrededominio_ext.crt (o servidor.crt)
+SSLCertificateKeyFile /usr/local/apache/conf/ssl.key/nombrededominio_ext (o servidor.key)
+Guarda los cambios y sal del editor de consola.
+Reinicia el servidor apache.

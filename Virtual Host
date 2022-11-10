@@ -1,0 +1,76 @@
+---GENERAR CLAVES SSH----
+ssh-keygen -t rsa
+usar cat en vez de nano para copiar claves ssh
+
+---VIRTUAL HOST HTTP A HTTPS---
+
+
+sudo mkdir -p /var/www/prueba
+cd /var/www
+ls
+ls-l
+sudo chown -R vicen:vicen prueba
+ls-l
+sudo chmod 755 -R prueba
+cd /etc/apache2/sites-available
+ls
+sudo cp 000-default.conf prueba.conf
+sudo nano prueba.conf
+	descomentar ServerName prueba.com
+	ServerAdmin:vicenayarza@gmail.com
+	DocumentRoot: /var/www/prueba
+ls
+cd ..
+ls
+sudo a2ensite prueba.conf
+cd /var/www
+ls 
+cd prueba
+sudo nano index.html
+ip a
+sudo nano /etc/hosts
+sudo systemclt reload apache2
+
+a2enmod ssl
+cd /etc/apache2/sites-available
+cat default-ssl.conf
+copiar todo 
+abrir prueba.conf
+pegar  
+	# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+	<IfModule mod_ssl.c>
+		<VirtualHost prueba.com:443>
+			ServerName:prueba.com
+			ServerAdmin vicenayarza@gmail.com
+			DocumentRoot /var/www/prueba
+		
+			ErrorLog ${APACHE_LOG_DIR}/error.log
+			CustomLog ${APACHE_LOG_DIR}/access.log combined
+		
+			#   SSL Engine Switch:
+			#   Enable/Disable SSL for this virtual host.
+			SSLEngine on
+
+			SSLCertificateFile	/etc/ssl/certs/ssl-cert-snakeoil.pem
+			SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+			#SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+
+			#SSLOptions +FakeBasicAuth +ExportCertData +StrictRequire
+			<FilesMatch "\.(cgi|shtml|phtml|php)$">
+				SSLOptions +StdEnvVars
+			</FilesMatch>
+			<Directory /usr/lib/cgi-bin>
+				SSLOptions +StdEnvVars
+			</Directory>
+
+		</VirtualHost>
+	</IfModule>
+systemclt restart apache2
+añadir arriba Redirect / https://prueba.com
+
+
+
+
+
+

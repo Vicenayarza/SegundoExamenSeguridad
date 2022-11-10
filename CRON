@@ -1,0 +1,41 @@
+---CRON Y CRONTAB---
+crear un scrip .sh 
+    SCRIPT:
+    Aquí muestro el script utilizado para realizar las copias de seguridad automatizadas:
+    #!/BIN/BASH
+    #copia completa cada mes, cada semana y incremental cada dia.
+    #Aquí introduzco el directorio del cual quiero hacer la copia
+    directorios=»/home/david»
+    #directorio donde voy a guardar la copia
+    backdir=»/copia»
+    fechadir=»/copia»
+    #calcular la fecha
+    diasemana=`date +%a` #dia de la semana eje: miercoles
+    diames=`date +%d` #dia del mes eje: 5 <– de marzo
+    diaymes=`date +%d%b` #dia y mes
+    ############################## comienzan las copias ##########################
+    # REALIZA LA COPIA DE SEGURIDAD COMPLETA TODOS LOS DIA 1 DE CADA MES #
+    if [ «$diames» = «01» ]; then
+    # si es dia 1 del mes hace una copia completa de los directorios que queremos
+    # poniendo dia y mes en el nombre del .tar
+    tar -cf $backdir/ctm-$diaymes.tar $directorios
+    fi
+    ## REALIZA LA COPIA DE SEGURIDAD COMPLETA TODOS LOS DOMINGOS.
+    if [ «$diasemana» == «dom» ]; then
+    # si el dia de la semana es domingo  hace la copia completa semanal.
+    fechahoy=`date +%d-%b`
+    # introduce el valor de la variable $fechahoy en un fichero llamado fecha-backup-completo
+    echo $fechahoy > $fechadir/fecha-backup-completo
+    tar -cd $backdir/cts-$diasemana.tar $directorios
+    ## CREA LAS COPIAS INCREMENTALES CADA DIA.
+    else
+    ## se le pasa al parametro –newer la fecha del ultimo backup
+    nuevo=»–newer=’cat $fechadir/fecha-backup-completo'»
+    ## ejecutamos tar para que solo haga la copia incremental con las diferencias.
+    tar $nuevo -cf $backdir/inc-$diasemana.tar $directorios
+    fi
+
+
+crontab -e 
+min hr day/mo mo/yr day/wk       /home/usuario/bin/bd-backup.sh
+0-59 0-12 1-31 1-12 1-7

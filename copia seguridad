@@ -1,0 +1,9 @@
+--Copia de Seguridad Completa--
+rsync -av /home/usuario/Seguridad /var/tmp/Backups
+
+--Copia de seguridad incremental---
+opcion1 	
+rsync -avhb --delete --backup-dir=/ruta/destino/copia_$(date +%d%m%Y%H%M) /ruta/origen/ /ruta/destino/
+opcion 2 
+rsync -av --delete directorio de origen directorio de destino
+
