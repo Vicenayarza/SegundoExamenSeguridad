@@ -1,0 +1,6 @@
+---hard link----
+crearlos :ln archivo_de_objetivo nombre_del_enlace
+ls-i  en carpeta : numero i nodo-- mismo i nodo, hard-link
+find . -inum inode_number
+
+
