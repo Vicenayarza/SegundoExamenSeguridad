@@ -1,0 +1,12 @@
+ls -ali lista los archivos y ver tamaño.
+ls -s (la s es minúscula) para listar archivos o directorios con sus tamaños
+Si queremos que la información que transferimos sea comprimida, para así ahorrar ancho de banda, sería así:
+rsync -avz /home/nuestrousuario /copiaseguridad
+
+    -r, --recursive Desciende recursivamente en los subdirectorios
+    -l, --links Copia enlaces
+    -p, --perms Preserva permisos
+    -t, --times Preserva los tiempos
+    -g, --group Preserva los grupos
+    -o, --owner Preserva el propietarios (solo si es el root)
+    -D, --devices Preserva los dispositivos (sólo si es el root)
